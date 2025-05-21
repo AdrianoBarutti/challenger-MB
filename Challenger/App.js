@@ -1,21 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import QrCodeScreen from './screens/QrCode';
-import CadastroScreen from './screens/CadastroScreen'; // <- Importação da nova tela
+import QrCodeScreen from './screens/QrCode'; // Tela para QR Code
+import CadastroScreen from './screens/CadastroScreen'; // Tela de Cadastro
+import LoginSucessoScreen from './screens/LoginSucessoScreen'; // Tela de Login Sucesso
 
 const Stack = createNativeStackNavigator();
 
 function HomeScreen({ navigation }) {
   const handleCadastroPress = () => {
-    navigation.navigate('Cadastro'); // <- Leva para a tela de cadastro
+    navigation.navigate('Cadastro'); // Navega para a tela de Cadastro
   };
 
   const handleQrCodePress = () => {
-    navigation.navigate('QrCode');
+    navigation.navigate('QrCode'); // Navega para a tela de QR Code
   };
 
   return (
@@ -58,6 +59,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
+        {/* Tela inicial Home */}
         <Stack.Screen 
           name="Home" 
           component={HomeScreen}
@@ -66,6 +68,7 @@ export default function App() {
             title: 'Página Inicial',
           }}
         />
+        {/* Tela de QR Code */}
         <Stack.Screen 
           name="QrCode" 
           component={QrCodeScreen} 
@@ -74,12 +77,22 @@ export default function App() {
             title: 'QR Code',
           }}
         />
+        {/* Tela de Cadastro */}
         <Stack.Screen 
           name="Cadastro" 
           component={CadastroScreen} 
           options={{
             headerShown: true,
             title: 'Cadastro',
+          }}
+        />
+        {/* Tela de Login Sucesso */}
+        <Stack.Screen 
+          name="LoginSucesso" 
+          component={LoginSucessoScreen} 
+          options={{
+            headerShown: true,
+            title: 'Login Efetuado',
           }}
         />
       </Stack.Navigator>

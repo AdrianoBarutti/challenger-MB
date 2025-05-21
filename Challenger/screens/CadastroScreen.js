@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,10 +8,10 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
-  Dimensions,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const CadastroScreen = () => {
+const CadastroScreen = ({ navigation }) => {
   const [nome, setNome] = useState('');
   const [emailCadastro, setEmailCadastro] = useState('');
   const [senhaCadastro, setSenhaCadastro] = useState('');
@@ -18,18 +19,64 @@ const CadastroScreen = () => {
   const [emailLogin, setEmailLogin] = useState('');
   const [senhaLogin, setSenhaLogin] = useState('');
 
-  const handleCadastro = () => {
-    Alert.alert('Cadastro', `Nome: ${nome}\nEmail: ${emailCadastro}`);
+
+  const [usuarioCadastro, setUsuarioCadastro] = useState(null);
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('usuarioCadastro');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          setUsuarioCadastro(parsedUser);
+        }
+      } catch (error) {
+        console.log('Erro ao carregar os dados do AsyncStorage:', error);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  const handleCadastro = async () => {
+    if (!nome || !emailCadastro || !senhaCadastro) {
+      Alert.alert('Erro', 'Preencha todos os campos de cadastro.');
+      return;
+    }
+
+    const newUser = {
+      nome,
+      email: emailCadastro,
+      senha: senhaCadastro,
+    };
+
+    await saveUserData(newUser);
+    setUsuarioCadastro(newUser);
+
+    setNome('');
+    setEmailCadastro('');
+    setSenhaCadastro('');
+
+    Alert.alert('Cadastro realizado', 'Seu cadastro foi realizado com sucesso!');
   };
 
   const handleLogin = () => {
-    Alert.alert('Login', `Email: ${emailLogin}`);
+    if (!usuarioCadastro) {
+      Alert.alert('Erro', 'Nenhum usuário cadastrado.');
+      return;
+    }
+
+    if (emailLogin === usuarioCadastro.email && senhaLogin === usuarioCadastro.senha) {
+      navigation.navigate('LoginSucesso');
+    } else {
+      Alert.alert('Erro', 'Email ou senha inválidos.');
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
       <View style={styles.container}>
-        {/* Coluna de Cadastro */}
+        {/* Seção de Cadastro */}
         <View style={styles.column}>
           <Text style={styles.title}>Cadastro</Text>
           <TextInput
@@ -57,7 +104,7 @@ const CadastroScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Coluna de Login */}
+        {/* Seção de Login */}
         <View style={styles.column}>
           <Text style={styles.title}>Login</Text>
           <TextInput
