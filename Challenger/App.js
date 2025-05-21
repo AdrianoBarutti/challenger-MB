@@ -4,15 +4,14 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import QrCodeScreen from './screens/QrCode';
+import CadastroScreen from './screens/CadastroScreen'; // <- Importação da nova tela
+
 const Stack = createNativeStackNavigator();
 
 function HomeScreen({ navigation }) {
-  const handleLoginPress = () => {
-    Alert.alert("Botão de Login", "Você clicou no botão de login!");
-  };
-
-  const handleHomePress = () => {
-    navigation.navigate('Home');
+  const handleCadastroPress = () => {
+    navigation.navigate('Cadastro'); // <- Leva para a tela de cadastro
   };
 
   const handleQrCodePress = () => {
@@ -30,7 +29,7 @@ function HomeScreen({ navigation }) {
             resizeMode="contain"
           />
         </View>
-        <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleCadastroPress}>
           <Image
             source={require('./assets/helmet.png')}
             style={styles.loginIcon}
@@ -43,38 +42,14 @@ function HomeScreen({ navigation }) {
       {/* Conteúdo */}
       <View style={styles.content}>
         <Text style={styles.contentText}>Conteúdo da página</Text>
-      </View>
 
-      {/* Barra inferior fixa */}
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomButton} onPress={handleHomePress}>
-          <View style={styles.iconWrapper}>
-            <Image
-              source={require('./assets/home.png')}
-              style={styles.icon}
-              resizeMode="contain"
-            />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.bottomButton} onPress={handleQrCodePress}>
-          <Image
-            source={require('./assets/qr-code.png')}
-            style={styles.qrIcon}
-            resizeMode="contain"
-          />
+        {/* Botão para ir para QR Code */}
+        <TouchableOpacity style={styles.button} onPress={handleQrCodePress}>
+          <Text style={styles.buttonText}>Ir para QR Code</Text>
         </TouchableOpacity>
       </View>
 
       <StatusBar style="light" />
-    </View>
-  );
-}
-
-function QrCodeScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Escaneador de QR Code</Text>
     </View>
   );
 }
@@ -86,12 +61,26 @@ export default function App() {
         <Stack.Screen 
           name="Home" 
           component={HomeScreen}
-          options={{ headerShown: false }} // Removendo a barra de título
+          options={{
+            headerShown: true,
+            title: 'Página Inicial',
+          }}
         />
         <Stack.Screen 
           name="QrCode" 
           component={QrCodeScreen} 
-          options={{ headerShown: false }} // Removendo a barra de título
+          options={{
+            headerShown: true,
+            title: 'QR Code',
+          }}
+        />
+        <Stack.Screen 
+          name="Cadastro" 
+          component={CadastroScreen} 
+          options={{
+            headerShown: true,
+            title: 'Cadastro',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -139,47 +128,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 60,
   },
   contentText: {
     fontSize: 18,
     color: '#000',
   },
-  bottomBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 60,
-    backgroundColor: 'rgb(34, 34, 34)',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderColor: '#333',
-  },
-  bottomButton: {
-    alignItems: 'center',
+  button: {
+    backgroundColor: '#007bff',
     padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
   },
-  bottomButtonText: {
+  buttonText: {
     color: '#fff',
     fontSize: 16,
-  },
-  qrIcon: {
-    width: 32,
-    height: 32,
-  },
-  iconWrapper: {
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  icon: {
-    width: 28,
-    height: 28,
-    marginBottom: 4,
   },
 });
