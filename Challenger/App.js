@@ -4,49 +4,62 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import QrCodeScreen from './screens/QrCode'; // Tela para QR Code
-import CadastroScreen from './screens/CadastroScreen'; // Tela de Cadastro
-import LoginSucessoScreen from './screens/LoginSucessoScreen'; // Tela de Login Sucesso
+import QrCodeScreen from './screens/QrCode';
+import CadastroScreen from './screens/CadastroScreen';
+import LoginSucessoScreen from './screens/LoginSucessoScreen';
+import FormularioScreen from './screens/FormularioScreen'; // Import da nova tela
 
 const Stack = createNativeStackNavigator();
 
 function HomeScreen({ navigation }) {
   const handleCadastroPress = () => {
-    navigation.navigate('Cadastro'); // Navega para a tela de Cadastro
+    navigation.navigate('Cadastro');
   };
 
   const handleQrCodePress = () => {
-    navigation.navigate('QrCode'); // Navega para a tela de QR Code
+    navigation.navigate('QrCode');
   };
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Image
-            source={require('./assets/mottu-logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
+        <Image
+          source={require('./assets/mottu-logo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <TouchableOpacity style={styles.loginButton} onPress={handleCadastroPress}>
           <Image
             source={require('./assets/helmet.png')}
             style={styles.loginIcon}
             resizeMode="contain"
           />
-          <Text style={styles.loginText}>Login/Cadastro</Text>
+          <Text style={styles.loginText}>Login / Cadastro</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Conteúdo */}
+      {/* Conteúdo principal */}
       <View style={styles.content}>
-        <Text style={styles.contentText}>Conteúdo da página</Text>
+        <Text style={styles.title}>Precisa de um Help?</Text>
+        <Text style={styles.subtitle}>
+          clique logo a baixo para abrir um formulario com o suporte!
+        </Text>
 
-        {/* Botão para ir para QR Code */}
+        <TouchableOpacity
+          style={styles.helpButton}
+          onPress={() => navigation.navigate('Formulario')}
+        >
+          <Text style={styles.helpButtonText}>Suporte</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.title}>Onde deixo minha moto?</Text>
+        <Text style={styles.subtitle}>
+          Clique no botão e vamos de ajudar com isto!
+        </Text>
+
         <TouchableOpacity style={styles.button} onPress={handleQrCodePress}>
-          <Text style={styles.buttonText}>Ir para QR Code</Text>
+          <Text style={styles.buttonText}>Escanei Aqui</Text>
         </TouchableOpacity>
       </View>
 
@@ -59,40 +72,44 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        {/* Tela inicial Home */}
-        <Stack.Screen 
-          name="Home" 
+        <Stack.Screen
+          name="Home"
           component={HomeScreen}
           options={{
             headerShown: true,
             title: 'Página Inicial',
           }}
         />
-        {/* Tela de QR Code */}
-        <Stack.Screen 
-          name="QrCode" 
-          component={QrCodeScreen} 
+        <Stack.Screen
+          name="QrCode"
+          component={QrCodeScreen}
           options={{
             headerShown: true,
             title: 'QR Code',
           }}
         />
-        {/* Tela de Cadastro */}
-        <Stack.Screen 
-          name="Cadastro" 
-          component={CadastroScreen} 
+        <Stack.Screen
+          name="Cadastro"
+          component={CadastroScreen}
           options={{
             headerShown: true,
             title: 'Cadastro',
           }}
         />
-        {/* Tela de Login Sucesso */}
-        <Stack.Screen 
-          name="LoginSucesso" 
-          component={LoginSucessoScreen} 
+        <Stack.Screen
+          name="LoginSucesso"
+          component={LoginSucessoScreen}
           options={{
             headerShown: true,
             title: 'Login Efetuado',
+          }}
+        />
+        <Stack.Screen
+          name="Formulario"
+          component={FormularioScreen}
+          options={{
+            headerShown: true,
+            title: 'Formulário de Suporte',
           }}
         />
       </Stack.Navigator>
@@ -113,14 +130,9 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 15,
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   logo: {
     width: 60,
     height: 60,
-    marginRight: 10,
   },
   loginButton: {
     alignItems: 'center',
@@ -139,21 +151,49 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    paddingHorizontal: 30,
+    paddingTop: 40,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
-  contentText: {
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#222',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  helpButton: {
+    backgroundColor: '#28a745',
+    paddingVertical: 14,
+    paddingHorizontal: 25,
+    borderRadius: 30,
+    width: '100%',
+    marginBottom: 10,
+  },
+  helpButtonText: {
+    color: '#fff',
     fontSize: 18,
-    color: '#000',
+    fontWeight: '600',
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+    backgroundColor: '#28a745',
+    paddingVertical: 14,
+    paddingHorizontal: 25,
+    borderRadius: 30,
+    width: '100%',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
