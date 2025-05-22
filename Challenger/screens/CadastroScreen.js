@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -19,8 +18,17 @@ const CadastroScreen = ({ navigation }) => {
   const [emailLogin, setEmailLogin] = useState('');
   const [senhaLogin, setSenhaLogin] = useState('');
 
-
   const [usuarioCadastro, setUsuarioCadastro] = useState(null);
+
+  // Função para salvar os dados do usuário no AsyncStorage
+  const saveUserData = async (user) => {
+    try {
+      await AsyncStorage.setItem('usuarioCadastro', JSON.stringify(user));
+    } catch (error) {
+      console.log('Erro ao salvar os dados do usuário:', error);
+      Alert.alert('Erro', 'Não foi possível salvar os dados.');
+    }
+  };
 
   useEffect(() => {
     const loadUserData = async () => {
