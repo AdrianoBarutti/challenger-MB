@@ -34,9 +34,9 @@ Web: Pressione W para abrir no navegador.
 
 AUTORES
 
-Adriano Barutti - RM556760
+Adriano Barutti - RM556760 - https://github.com/AdrianoBarutti
 
-Vitor Kenzo Mizumoto - RM557245
+Vitor Kenzo Mizumoto - RM557245 - https://github.com/vitorkenzoo
 
 
 SOLUÇÃO 
