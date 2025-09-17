@@ -63,7 +63,7 @@ export default function FormularioScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Formulário de Suporte Mottu</Text>
+      <Text style={styles.title}>Suporte Mottu</Text>
 
       <Text style={styles.label}>Nome:</Text>
       <TextInput
@@ -142,7 +142,7 @@ export default function FormularioScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff#fff',
     flexGrow: 1,
   },
   title: {

@@ -1,8 +1,10 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useColorScheme } from 'react-native'; // Para controle de tema
+import Ionicons from 'react-native-vector-icons/Ionicons'; // Para usar ícones vetoriais
 
 import QrCodeScreen from './screens/QrCode';
 import CadastroScreen from './screens/CadastroScreen';
@@ -12,6 +14,13 @@ import FormularioScreen from './screens/FormularioScreen'; // Import da nova tel
 const Stack = createNativeStackNavigator();
 
 function HomeScreen({ navigation }) {
+  const [isDarkMode, setIsDarkMode] = useState(false); // Estado para o tema
+  const scheme = useColorScheme(); // Detecta o tema atual (light ou dark)
+  
+  useEffect(() => {
+    setIsDarkMode(scheme === 'dark');
+  }, [scheme]); // Atualiza o tema sempre que o esquema de cores mudar
+  
   const handleCadastroPress = () => {
     navigation.navigate('Cadastro');
   };
@@ -20,8 +29,12 @@ function HomeScreen({ navigation }) {
     navigation.navigate('QrCode');
   };
 
+  const toggleTheme = () => {
+    setIsDarkMode(prev => !prev); // Alterna entre claro e escuro
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
       {/* Header */}
       <View style={styles.header}>
         <Image
@@ -30,20 +43,17 @@ function HomeScreen({ navigation }) {
           resizeMode="contain"
         />
         <TouchableOpacity style={styles.loginButton} onPress={handleCadastroPress}>
-          <Image
-            source={require('./assets/helmet.png')}
-            style={styles.loginIcon}
-            resizeMode="contain"
-          />
           <Text style={styles.loginText}>Login / Cadastro</Text>
         </TouchableOpacity>
       </View>
 
       {/* Conteúdo principal */}
       <View style={styles.content}>
-        <Text style={styles.title}>Precisa de um Help?</Text>
-        <Text style={styles.subtitle}>
-          clique logo a baixo para abrir um formulario com o suporte!
+        <Text style={[styles.title, { color: isDarkMode ? '#fff' : '#222' }]}>
+          Precisa de um Help?
+        </Text>
+        <Text style={[styles.subtitle, { color: isDarkMode ? '#fff' : '#555' }]}>
+          Clique logo abaixo para abrir um formulário com o suporte!
         </Text>
 
         <TouchableOpacity
@@ -53,9 +63,11 @@ function HomeScreen({ navigation }) {
           <Text style={styles.helpButtonText}>Suporte</Text>
         </TouchableOpacity>
 
-        <Text style={styles.title}>Onde deixo minha moto?</Text>
-        <Text style={styles.subtitle}>
-          Clique no botão e vamos de ajudar com isto!
+        <Text style={[styles.title, { color: isDarkMode ? '#fff' : '#222' }]}>
+          Onde deixo minha moto?
+        </Text>
+        <Text style={[styles.subtitle, { color: isDarkMode ? '#fff' : '#555' }]}>
+          Clique no botão e vamos te ajudar com isto!
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={handleQrCodePress}>
@@ -63,7 +75,19 @@ function HomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <StatusBar style="light" />
+      {/* Botão para alternar entre modos claro e escuro, agora na parte inferior */}
+      <TouchableOpacity
+        style={[styles.toggleButton, isDarkMode ? styles.darkToggleButton : styles.lightToggleButton]}
+        onPress={toggleTheme}
+      >
+        <Ionicons
+          name={isDarkMode ? 'moon' : 'sunny'} // Ícones de Lua ou Sol
+          size={25}
+          color={isDarkMode ? '#fff' : '#222'} // Cor do ícone
+        />
+      </TouchableOpacity>
+
+      <StatusBar style={isDarkMode ? "light" : "dark"} />
     </View>
   );
 }
@@ -120,7 +144,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  lightContainer: {
     backgroundColor: '#fff',
+  },
+  darkContainer: {
+    backgroundColor: '#222',
   },
   header: {
     backgroundColor: 'rgb(34, 34, 34)',
@@ -139,14 +168,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 8,
   },
-  loginIcon: {
-    width: 30,
-    height: 30,
-    marginBottom: 4,
-  },
   loginText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: 14,
     textAlign: 'center',
   },
   content: {
@@ -159,13 +183,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#222',
     textAlign: 'center',
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#555',
     textAlign: 'center',
     marginBottom: 30,
   },
@@ -195,5 +217,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  toggleButton: {
+    position: 'absolute',
+    bottom: 20, // Agora está na parte inferior
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5, // Sombra para o botão
+  },
+  lightToggleButton: {
+    backgroundColor: '#28a745', // Cor de fundo no modo claro
+  },
+  darkToggleButton: {
+    backgroundColor: '#2c2c2c', // Cor de fundo no modo escuro
   },
 });

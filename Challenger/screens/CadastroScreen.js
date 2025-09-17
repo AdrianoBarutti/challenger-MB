@@ -141,14 +141,14 @@ const CadastroScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
-    backgroundColor: '#121212',
+    backgroundColor: 'rgb(34, 34, 34)',
   },
   container: {
     flexDirection: 'row',
     padding: 20,
     justifyContent: 'space-between',
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: 'rgb(34, 34, 34)',
   },
   column: {
     flex: 1,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#00FF00',
+    color: '#28a745',
   },
   input: {
     height: 45,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Barlow-Regular',
   },
   button: {
-    backgroundColor: '#00FF00',
+    backgroundColor: '#28a745',
     paddingVertical: 12,
     borderRadius: 6,
     marginTop: 8,

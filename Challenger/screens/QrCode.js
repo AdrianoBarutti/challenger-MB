@@ -54,7 +54,7 @@ const QrCode = () => {
       {isScanning ? (
         <View style={styles.scannerArea}>
           <Text style={styles.scanText}>Escaneando QR Code...</Text>
-          <ActivityIndicator size="large" color="#00FF00" />
+          <ActivityIndicator size="large" color="#28a745" />
         </View>
       ) : (
         <View style={styles.resultArea}>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   resultText: {
-    color: '#00FF00',
+    color: '#28a745',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 15,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   vaga: {
     fontSize: 26,
-    color: '#00FF00',
+    color: '#28a745',
     fontWeight: 'bold',
   },
   centered: {
