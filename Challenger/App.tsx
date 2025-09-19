@@ -6,10 +6,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useColorScheme } from 'react-native'; // Para controle de tema
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Para usar ícones vetoriais
 
-import QrCodeScreen from './screens/QrCode';
-import CadastroScreen from './screens/CadastroScreen';
-import LoginSucessoScreen from './screens/LoginSucessoScreen';
-import FormularioScreen from './screens/FormularioScreen'; // Import da nova tela
+import QrCodeScreen from './App/QrCode';
+import CadastroScreen from './App/CadastroScreen';
+import LoginSucessoScreen from './App/LoginSucessoScreen';
+import FormularioScreen from './App/FormularioScreen'; // Import da nova tela
 
 const Stack = createNativeStackNavigator();
 

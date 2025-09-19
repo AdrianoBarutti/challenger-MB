@@ -142,7 +142,7 @@ export default function FormularioScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff#fff',
+    backgroundColor: '#fff',
     flexGrow: 1,
   },
   title: {
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginBottom: 30,
     textAlign: 'center',
-    color: '#222', 
+    color: '#222',
   },
   label: {
     fontSize: 16,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#28a745', 
+    borderColor: '#28a745',
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 12,
@@ -184,10 +184,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#28a745',
   },
   clearButton: {
-    backgroundColor: '#dc3545', 
+    backgroundColor: '#dc3545',
   },
   showButton: {
-    backgroundColor: '#222', 
+    backgroundColor: '#222',
     marginTop: 25,
     borderRadius: 30,
     paddingVertical: 15,
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   previewContainer: {
     marginTop: 30,
     padding: 15,
-    backgroundColor: '#e6f4ea', 
+    backgroundColor: '#e6f4ea',
   },
   previewTitle: {
     fontSize: 18,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   chamadosContainer: {
     marginTop: 30,
     padding: 15,
-    backgroundColor: '#f0f7ff', 
+    backgroundColor: '#f0f7ff',
     borderRadius: 12,
   },
   chamadosTitle: {
