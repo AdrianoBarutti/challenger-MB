@@ -10,6 +10,7 @@ import QrCodeScreen from './App/QrCode';
 import CadastroScreen from './App/CadastroScreen';
 import LoginSucessoScreen from './App/LoginSucessoScreen';
 import FormularioScreen from './App/FormularioScreen'; // Import da nova tela
+import CadastrarUsuario from './App/CadastrarUsuario';
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +74,14 @@ function HomeScreen({ navigation }) {
         <TouchableOpacity style={styles.button} onPress={handleQrCodePress}>
           <Text style={styles.buttonText}>Escanei Aqui</Text>
         </TouchableOpacity>
+
+        {/* Botão para Cadastrar Usuário */}
+        <TouchableOpacity
+          style={[styles.button, { marginTop: 20 }]}
+          onPress={() => navigation.navigate('CadastrarUsuario')}
+        >
+          <Text style={styles.buttonText}>Cadastrar Usuário</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Botão para alternar entre modos claro e escuro, agora na parte inferior */}
@@ -134,6 +143,14 @@ export default function App() {
           options={{
             headerShown: true,
             title: 'Formulário de Suporte',
+          }}
+        />
+        <Stack.Screen
+          name="CadastrarUsuario"
+          component={CadastrarUsuario}
+          options={{
+            headerShown: true,
+            title: 'Cadastrar Usuário',
           }}
         />
       </Stack.Navigator>
