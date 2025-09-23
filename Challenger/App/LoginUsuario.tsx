@@ -1,45 +1,37 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
 
-export default function LoginUsuario() {
+export default function LoginUsuario({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
-
-  type RootStackParamList = {
-    Home: undefined;
-    // add other routes here if needed
-  };
-
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [erro, setErro] = useState("");
 
   const login = () => {
     if (!email.trim() || !senha.trim()) {
-      Alert.alert("Erro", "Preencha todos os campos.");
+      setErro("Preencha todos os campos!");
       return;
     }
 
     setLoading(true);
+    setErro("");
+
     signInWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("Login realizado:", user);
-        Alert.alert("Sucesso", "Login efetuado com sucesso!");
-        navigation.navigate("Home"); 
+        console.log("Login efetuado:", userCredential.user);
+        // Navega para Home (nome da rota deve existir no Stack Navigator)
+        navigation.navigate("Home");
       })
       .catch((error) => {
-        let mensagem = "Erro ao realizar login.";
-        if (error.code === "auth/user-not-found") {
-          mensagem = "Usuário não encontrado.";
-        } else if (error.code === "auth/wrong-password") {
-          mensagem = "Senha incorreta.";
-        } else if (error.code === "auth/invalid-email") {
-          mensagem = "Email inválido.";
-        }
-        Alert.alert("Erro", mensagem);
+        console.log("Erro login:", error);
+        let mensagem = "Email ou senha incorretos.";
+        if (error.code === "auth/user-not-found") mensagem = "Usuário não encontrado.";
+        else if (error.code === "auth/wrong-password") mensagem = "Senha incorreta.";
+        else if (error.code === "auth/invalid-email") mensagem = "Email inválido.";
+
+        setErro(mensagem);
       })
       .finally(() => setLoading(false));
   };
@@ -47,14 +39,16 @@ export default function LoginUsuario() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
+
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        autoCapitalize="none"
         keyboardType="email-address"
+        autoCapitalize="none"
         style={styles.input}
       />
+
       <TextInput
         placeholder="Senha"
         value={senha}
@@ -62,14 +56,20 @@ export default function LoginUsuario() {
         secureTextEntry
         style={styles.input}
       />
+
+      {erro ? <Text style={styles.erroText}>{erro}</Text> : null}
+
       <TouchableOpacity
         style={[styles.button, loading && { backgroundColor: "#999" }]}
         onPress={login}
         disabled={loading}
       >
-        <Text style={styles.buttonText}>
-          {loading ? "Entrando..." : "Login"}
-        </Text>
+        <Text style={styles.buttonText}>{loading ? "Entrando..." : "Login"}</Text>
+      </TouchableOpacity>
+
+      {/* Link para cadastro — agora usando navigation */}
+      <TouchableOpacity onPress={() => navigation.navigate("CadastrarUsuario")}>
+        <Text style={styles.cadastroText}>Não possui cadastro? Cadastre-se</Text>
       </TouchableOpacity>
     </View>
   );
@@ -92,6 +92,9 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 30,
     alignItems: "center",
+    marginBottom: 15,
   },
   buttonText: { color: "#fff", fontWeight: "700", fontSize: 18 },
+  erroText: { color: "#dc3545", fontSize: 16, marginBottom: 15, textAlign: "center" },
+  cadastroText: { color: "#28a745", fontSize: 16, textAlign: "center", marginTop: 10 },
 });

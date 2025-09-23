@@ -11,6 +11,7 @@ import QrCodeScreen from "./App/QrCode";
 import FormularioScreen from "./App/FormularioScreen";
 import CadastrarUsuario from "./App/CadastrarUsuario";
 import LoginUsuario from "./App/LoginUsuario";
+import PerfilUsuario from "./App/PerfilUsuario";
 
 const Stack = createNativeStackNavigator();
 
