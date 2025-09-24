@@ -11,7 +11,7 @@ import QrCodeScreen from "./App/QrCode";
 import FormularioScreen from "./App/FormularioScreen";
 import CadastrarUsuario from "./App/CadastrarUsuario";
 import LoginUsuario from "./App/LoginUsuario";
-import PerfilUsuario from "./App/PerfilUsuario";
+import PerfilUsuario from "./App/PerfilUsuario"; // 👈 Import da tela de perfil
 
 const Stack = createNativeStackNavigator();
 
@@ -40,16 +40,42 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
+        {/* Home */}
         <Stack.Screen
           name="Home"
           options={{ title: "Página Inicial", headerShown: false }}
         >
           {(props) => <HomeScreen {...props} user={user} />}
         </Stack.Screen>
-        <Stack.Screen name="QrCode" component={QrCodeScreen} options={{ title: "QR Code" }} />
-        <Stack.Screen name="Formulario" component={FormularioScreen} options={{ title: "Formulário de Suporte" }} />
-        <Stack.Screen name="CadastrarUsuario" component={CadastrarUsuario} options={{ title: "Cadastrar Usuário" }} />
-        <Stack.Screen name="LoginUsuario" component={LoginUsuario} options={{ title: "Login" }} />
+
+        {/* Outras telas */}
+        <Stack.Screen
+          name="QrCode"
+          component={QrCodeScreen}
+          options={{ title: "QR Code" }}
+        />
+        <Stack.Screen
+          name="Formulario"
+          component={FormularioScreen}
+          options={{ title: "Formulário de Suporte" }}
+        />
+        <Stack.Screen
+          name="CadastrarUsuario"
+          component={CadastrarUsuario}
+          options={{ title: "Cadastrar Usuário" }}
+        />
+        <Stack.Screen
+          name="LoginUsuario"
+          component={LoginUsuario}
+          options={{ title: "Login" }}
+        />
+
+        {/* ✅ Tela de Perfil */}
+        <Stack.Screen
+          name="PerfilUsuario"
+          component={PerfilUsuario}
+          options={{ title: "Perfil do Usuário" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
