@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../services/firebaseConfig";
+import { auth } from "../src/services/firebaseConfig";
 import { signOut } from "firebase/auth";
+import { useTranslation } from "react-i18next";
 
 export default function PerfilUsuario() {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [user, setUser] = useState(auth.currentUser);
 
   useEffect(() => {
     const loadUser = async () => {
-      await auth.currentUser?.reload(); // força atualização
+      await auth.currentUser?.reload();
       setUser(auth.currentUser);
     };
     loadUser();
@@ -19,17 +21,16 @@ export default function PerfilUsuario() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      Alert.alert("Sucesso", "Você saiu da conta.");
+      Alert.alert(t("successTitle"), t("logoutSuccess"));
       navigation.navigate("Home" as never);
     } catch (error) {
-      Alert.alert("Erro", "Não foi possível sair da conta.");
+      Alert.alert(t("errorTitle"), t("logoutError"));
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Perfil do Usuário</Text>
-
+      <Text style={styles.title}>{t("profileTitle")}</Text>
       <Image
         source={{
           uri:
@@ -38,28 +39,25 @@ export default function PerfilUsuario() {
         }}
         style={styles.profileImage}
       />
-
       <View style={styles.card}>
-        <Text style={styles.label}>Nome:</Text>
-        <Text style={styles.value}>{user?.displayName || "Sem nome definido"}</Text>
-
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.value}>{user?.email || "Sem email definido"}</Text>
+        <Text style={styles.label}>{t("nameLabel")}</Text>
+        <Text style={styles.value}>{user?.displayName || t("noNameDefined")}</Text>
+        <Text style={styles.label}>{t("emailLabel")}</Text>
+        <Text style={styles.value}>{user?.email || t("noEmailDefined")}</Text>
       </View>
-
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Sair da Conta</Text>
+        <Text style={styles.logoutButtonText}>{t("logoutButton")}</Text>
       </TouchableOpacity>
-
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
-        <Text style={styles.backButtonText}>Voltar</Text>
+        <Text style={styles.backButtonText}>{t("backButton")}</Text>
       </TouchableOpacity>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

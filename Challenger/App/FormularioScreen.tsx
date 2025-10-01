@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from "react-i18next";
 
 export default function FormularioScreen() {
+  const { t } = useTranslation();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [mensagem, setMensagem] = useState('');
@@ -11,7 +13,7 @@ export default function FormularioScreen() {
 
   const handleSalvar = async () => {
     if (!nome.trim() || !email.trim() || !mensagem.trim()) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+      Alert.alert(t('errorTitle'), t('fillAllFields'));
       return;
     }
 
@@ -30,7 +32,7 @@ export default function FormularioScreen() {
 
       await AsyncStorage.setItem('@form_chamados', JSON.stringify(chamadosSalvos));
 
-      Alert.alert('Sucesso', 'Chamado salvo com sucesso!');
+      Alert.alert(t('successTitle'), t('ticketSavedSuccess'));
 
       limparCampos();
 
@@ -38,7 +40,7 @@ export default function FormularioScreen() {
         setChamados(chamadosSalvos);
       }
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível salvar o chamado.');
+      Alert.alert(t('errorTitle'), t('ticketSaveError'));
       console.error(error);
     }
   };
@@ -56,70 +58,67 @@ export default function FormularioScreen() {
       setChamados(chamadosSalvos);
       setMostrarChamados(true);
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível carregar os chamados.');
+      Alert.alert(t('errorTitle'), t('ticketLoadError'));
       console.error(error);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Suporte Mottu</Text>
-
-      <Text style={styles.label}>Nome:</Text>
+      <Text style={styles.title}>{t('supportTitle')}</Text>
+      <Text style={styles.label}>{t('nameLabel')}</Text>
       <TextInput
         style={styles.input}
         value={nome}
         onChangeText={setNome}
-        placeholder="Digite seu nome"
+        placeholder={t('namePlaceholder')}
         placeholderTextColor="#999"
       />
-
-      <Text style={styles.label}>E-mail:</Text>
+      <Text style={styles.label}>{t('emailLabel')}</Text>
       <TextInput
         style={styles.input}
         value={email}
         onChangeText={setEmail}
-        placeholder="Digite seu e-mail"
+        placeholder={t('emailPlaceholder')}
         placeholderTextColor="#999"
         keyboardType="email-address"
         autoCapitalize="none"
       />
-
-      <Text style={styles.label}>Mensagem:</Text>
+      <Text style={styles.label}>{t('messageLabel')}</Text>
       <TextInput
         style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
         value={mensagem}
         onChangeText={setMensagem}
-        placeholder="Digite sua mensagem"
+        placeholder={t('messagePlaceholder')}
         placeholderTextColor="#999"
         multiline
       />
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={handleSalvar}>
-          <Text style={styles.buttonText}>Salvar</Text>
+          <Text style={styles.buttonText}>{t('saveButton')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.clearButton]} onPress={limparCampos}>
-          <Text style={styles.buttonText}>Limpar</Text>
+          <Text style={styles.buttonText}>{t('clearButton')}</Text>
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity style={[styles.button, styles.showButton]} onPress={carregarChamados}>
-        <Text style={styles.buttonText}>Exibir Chamados</Text>
+        <Text style={styles.buttonText}>{t('showTicketsButton')}</Text>
       </TouchableOpacity>
 
       <View style={styles.previewContainer}>
-        <Text style={styles.previewTitle}>Dados Digitados:</Text>
-        <Text style={styles.previewText}><Text style={styles.previewLabel}>Nome: </Text>{nome || '(vazio)'}</Text>
-        <Text style={styles.previewText}><Text style={styles.previewLabel}>E-mail: </Text>{email || '(vazio)'}</Text>
-        <Text style={styles.previewText}><Text style={styles.previewLabel}>Mensagem: </Text>{mensagem || '(vazio)'}</Text>
+        <Text style={styles.previewTitle}>{t('inputDataTitle')}</Text>
+        <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('nameLabel')} </Text>{nome || '(vazio)'}</Text>
+        <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('emailLabel')} </Text>{email || '(vazio)'}</Text>
+        <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('messageLabel')} </Text>{mensagem || '(vazio)'}</Text>
       </View>
 
       {mostrarChamados && (
         <View style={styles.chamadosContainer}>
-          <Text style={styles.chamadosTitle}>Chamados Salvos:</Text>
+          <Text style={styles.chamadosTitle}>{t('savedTicketsTitle')}</Text>
           {chamados.length === 0 ? (
-            <Text style={{ textAlign: 'center', color: '#555' }}>Nenhum chamado salvo ainda.</Text>
+            <Text style={{ textAlign: 'center', color: '#555' }}>{t('noTicketsSaved')}</Text>
           ) : (
             <FlatList
               data={chamados}

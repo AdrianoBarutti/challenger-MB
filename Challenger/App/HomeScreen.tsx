@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useColorScheme } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useTranslation } from "react-i18next";
 
 export default function HomeScreen({ navigation, user }: any) {
+  const { t, i18n } = useTranslation();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const scheme = useColorScheme();
 
@@ -12,13 +14,15 @@ export default function HomeScreen({ navigation, user }: any) {
   }, [scheme]);
 
   const toggleTheme = () => setIsDarkMode((prev) => !prev);
+  
+  const mudarIdioma = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
 
   return (
     <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
-      {/* Header com logo e botão de login */}
       <View style={styles.header}>
         <Image source={require("../assets/mottu-logo.png")} style={styles.logo} resizeMode="contain" />
-        
         {user ? (
           <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
             <Ionicons name="person-circle" size={40} color="#28a745" />
@@ -28,42 +32,50 @@ export default function HomeScreen({ navigation, user }: any) {
             style={styles.loginButton}
             onPress={() => navigation.navigate("LoginUsuario")}
           >
-            <Text style={styles.loginText}>Login / Cadastro</Text>
+            <Text style={styles.loginText}>{t("loginRegisterButton")}</Text>
           </TouchableOpacity>
         )}
       </View>
+      
+      {/* Botões de idioma adicionados aqui */}
+      <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 15 }}>
+        <TouchableOpacity
+          style={[styles.botao, { marginRight: 10, backgroundColor: "#007bff" }]}
+          onPress={() => mudarIdioma("pt")}
+        >
+          <Text style={styles.textoBotao}>PT</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.botao, { backgroundColor: "#28a745" }]}
+          onPress={() => mudarIdioma("es")}
+        >
+          <Text style={styles.textoBotao}>ES</Text>
+        </TouchableOpacity>
+      </View>
 
-      {/* Conteúdo principal */}
       <View style={styles.content}>
         <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
-          Precisa de um Help?
+          {t("needHelpQuestion")}
         </Text>
         <Text style={[styles.subtitle, { color: isDarkMode ? "#fff" : "#555" }]}>
-          Clique logo abaixo para abrir um formulário com o suporte!
+          {t("clickForSupportText")}
         </Text>
-
-        {/* Botão Suporte */}
         <TouchableOpacity
           style={styles.helpButton}
           onPress={() => navigation.navigate("Formulario")}
         >
-          <Text style={styles.helpButtonText}>Suporte</Text>
+          <Text style={styles.helpButtonText}>{t("supportButton")}</Text>
         </TouchableOpacity>
-
         <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
-          Onde deixo minha moto?
+          {t("whereToParkQuestion")}
         </Text>
         <Text style={[styles.subtitle, { color: isDarkMode ? "#fff" : "#555" }]}>
-          Clique no botão e vamos te ajudar com isto!
+          {t("clickForHelpText")}
         </Text>
-
-        {/* Botão QR Code */}
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("QrCode")}>
-          <Text style={styles.buttonText}>Escanei Aqui</Text>
+          <Text style={styles.buttonText}>{t("scanHereButton")}</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Botão de alternar tema */}
       <TouchableOpacity
         style={[styles.toggleButton, isDarkMode ? styles.darkToggleButton : styles.lightToggleButton]}
         onPress={toggleTheme}
@@ -90,7 +102,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 15,
   },
-  logo: { width: 80, height: 40 }, // Ajustado para não esticar
+  logo: { width: 80, height: 40 },
   loginButton: { alignItems: "center", justifyContent: "center", paddingHorizontal: 8 },
   loginText: { color: "#fff", fontSize: 14, textAlign: "center" },
   content: {
@@ -132,4 +144,16 @@ const styles = StyleSheet.create({
   },
   lightToggleButton: { backgroundColor: "#28a745" },
   darkToggleButton: { backgroundColor: "#2c2c2c" },
+  // Adicione os estilos dos botões de idioma
+  botao: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  textoBotao: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+  },
 });

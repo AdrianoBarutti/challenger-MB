@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../services/firebaseConfig";
+import { auth } from "../src/services/firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 export default function LoginUsuario({ navigation }: any) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,7 +13,7 @@ export default function LoginUsuario({ navigation }: any) {
 
   const login = () => {
     if (!email.trim() || !senha.trim()) {
-      setErro("Preencha todos os campos!");
+      setErro(t("fillAllFields"));
       return;
     }
 
@@ -21,15 +23,14 @@ export default function LoginUsuario({ navigation }: any) {
     signInWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
         console.log("Login efetuado:", userCredential.user);
-        // Navega para Home (nome da rota deve existir no Stack Navigator)
         navigation.navigate("Home");
       })
       .catch((error) => {
         console.log("Erro login:", error);
-        let mensagem = "Email ou senha incorretos.";
-        if (error.code === "auth/user-not-found") mensagem = "Usuário não encontrado.";
-        else if (error.code === "auth/wrong-password") mensagem = "Senha incorreta.";
-        else if (error.code === "auth/invalid-email") mensagem = "Email inválido.";
+        let mensagem = t("invalidCredentials");
+        if (error.code === "auth/user-not-found") mensagem = t("userNotFound");
+        else if (error.code === "auth/wrong-password") mensagem = t("wrongPassword");
+        else if (error.code === "auth/invalid-email") mensagem = t("invalidEmail");
 
         setErro(mensagem);
       })
@@ -38,42 +39,37 @@ export default function LoginUsuario({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-
+      <Text style={styles.title}>{t("loginTitle")}</Text>
       <TextInput
-        placeholder="Email"
+        placeholder={t("emailPlaceholder")}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
         style={styles.input}
       />
-
       <TextInput
-        placeholder="Senha"
+        placeholder={t("passwordPlaceholder")}
         value={senha}
         onChangeText={setSenha}
         secureTextEntry
         style={styles.input}
       />
-
       {erro ? <Text style={styles.erroText}>{erro}</Text> : null}
-
       <TouchableOpacity
         style={[styles.button, loading && { backgroundColor: "#999" }]}
         onPress={login}
         disabled={loading}
       >
-        <Text style={styles.buttonText}>{loading ? "Entrando..." : "Login"}</Text>
+        <Text style={styles.buttonText}>{loading ? t("loggingIn") : t("loginButton")}</Text>
       </TouchableOpacity>
-
-      {/* Link para cadastro — agora usando navigation */}
       <TouchableOpacity onPress={() => navigation.navigate("CadastrarUsuario")}>
-        <Text style={styles.cadastroText}>Não possui cadastro? Cadastre-se</Text>
+        <Text style={styles.cadastroText}>{t("noAccountText")}</Text>
       </TouchableOpacity>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 24, justifyContent: "center" },

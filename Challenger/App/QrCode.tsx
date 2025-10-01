@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { useTranslation } from "react-i18next";
 
 const QrCode = () => {
+  const { t } = useTranslation();
   const [hasPermission, setHasPermission] = useState(null);
   const [isScanning, setIsScanning] = useState(true);
   const [vaga, setVaga] = useState(null);
@@ -18,7 +20,6 @@ const QrCode = () => {
 
     const getCameraPermission = async () => {
       if (Platform.OS === 'web') {
-        // Simula permissão concedida no navegador
         setHasPermission(true);
         simularLeituraQRCode();
       } else {
@@ -36,7 +37,7 @@ const QrCode = () => {
   if (hasPermission === null) {
     return (
       <View style={styles.centered}>
-        <Text>Solicitando permissão para a câmera...</Text>
+        <Text>{t("cameraPermissionRequesting")}</Text>
       </View>
     );
   }
@@ -44,7 +45,7 @@ const QrCode = () => {
   if (hasPermission === false) {
     return (
       <View style={styles.centered}>
-        <Text>Permissão para a câmera negada.</Text>
+        <Text>{t("cameraPermissionDenied")}</Text>
       </View>
     );
   }
@@ -53,18 +54,19 @@ const QrCode = () => {
     <View style={styles.container}>
       {isScanning ? (
         <View style={styles.scannerArea}>
-          <Text style={styles.scanText}>Escaneando QR Code...</Text>
+          <Text style={styles.scanText}>{t("scanningQrCode")}</Text>
           <ActivityIndicator size="large" color="#28a745" />
         </View>
       ) : (
         <View style={styles.resultArea}>
-          <Text style={styles.resultText}> QR Code reconhecido!</Text>
-          <Text style={styles.vagaText}>Sua vaga é: <Text style={styles.vaga}>{vaga}</Text></Text>
+          <Text style={styles.resultText}>{t("qrCodeRecognized")}</Text>
+          <Text style={styles.vagaText}>{t("yourParkingSpace")}<Text style={styles.vaga}>{vaga}</Text></Text>
         </View>
       )}
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

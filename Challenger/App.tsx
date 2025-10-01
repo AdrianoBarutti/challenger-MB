@@ -3,7 +3,10 @@ import { ActivityIndicator, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./services/firebaseConfig";
+import { auth } from "./src/services/firebaseConfig";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./src/services/i18n";
+import { useTranslation } from "react-i18next";
 
 // Telas
 import HomeScreen from "./App/HomeScreen";
@@ -11,25 +14,24 @@ import QrCodeScreen from "./App/QrCode";
 import FormularioScreen from "./App/FormularioScreen";
 import CadastrarUsuario from "./App/CadastrarUsuario";
 import LoginUsuario from "./App/LoginUsuario";
-import PerfilUsuario from "./App/PerfilUsuario"; // 👈 Import da tela de perfil
+import PerfilUsuario from "./App/PerfilUsuario";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+const AppContent = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
-  // Observa mudanças no login do usuário
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user); // salva o usuário logado
+      setUser(user);
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
   if (loading) {
-    // Mostra loading enquanto verifica login
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color="#28a745" />
@@ -40,43 +42,46 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        {/* Home */}
         <Stack.Screen
           name="Home"
-          options={{ title: "Página Inicial", headerShown: false }}
+          options={{ title: t("homeScreenTitle"), headerShown: false }}
         >
           {(props) => <HomeScreen {...props} user={user} />}
         </Stack.Screen>
-
-        {/* Outras telas */}
         <Stack.Screen
           name="QrCode"
           component={QrCodeScreen}
-          options={{ title: "QR Code" }}
+          options={{ title: t("qrCodeScreenTitle") }}
         />
         <Stack.Screen
           name="Formulario"
           component={FormularioScreen}
-          options={{ title: "Formulário de Suporte" }}
+          options={{ title: t("formScreenTitle") }}
         />
         <Stack.Screen
           name="CadastrarUsuario"
           component={CadastrarUsuario}
-          options={{ title: "Cadastrar Usuário" }}
+          options={{ title: t("registerUserScreenTitle") }}
         />
         <Stack.Screen
           name="LoginUsuario"
           component={LoginUsuario}
-          options={{ title: "Login" }}
+          options={{ title: t("loginScreenTitle") }}
         />
-
-        {/* ✅ Tela de Perfil */}
         <Stack.Screen
           name="PerfilUsuario"
           component={PerfilUsuario}
-          options={{ title: "Perfil do Usuário" }}
+          options={{ title: t("profileScreenTitle") }}
         />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+};
+
+export default function App() {
+  return (
+    <I18nextProvider i18n={i18n}>
+      <AppContent />
+    </I18nextProvider>
   );
 }
