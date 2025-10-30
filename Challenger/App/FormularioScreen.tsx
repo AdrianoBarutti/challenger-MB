@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from "react-i18next";
+import { MotiView } from "moti";
+
 
 export default function FormularioScreen() {
   const { t } = useTranslation();
@@ -63,59 +65,96 @@ export default function FormularioScreen() {
     }
   };
 
+  // Define uma animação de entrada padrão
+    const itemAnimation = (delay: number) => ({
+      from: { opacity: 0, translateY: 15 },
+      animate: { opacity: 1, translateY: 0 },
+      transition: { type: 'timing' as const, duration: 500, delay },
+    });
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{t('supportTitle')}</Text>
-      <Text style={styles.label}>{t('nameLabel')}</Text>
-      <TextInput
-        style={styles.input}
-        value={nome}
-        onChangeText={setNome}
-        placeholder={t('namePlaceholder')}
-        placeholderTextColor="#999"
-      />
-      <Text style={styles.label}>{t('emailLabel')}</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder={t('emailPlaceholder')}
-        placeholderTextColor="#999"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <Text style={styles.label}>{t('messageLabel')}</Text>
-      <TextInput
-        style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
-        value={mensagem}
-        onChangeText={setMensagem}
-        placeholder={t('messagePlaceholder')}
-        placeholderTextColor="#999"
-        multiline
-      />
+      
+      {/* 2. TÍTULO */}
+      <MotiView {...itemAnimation(100)}>
+        <Text style={styles.title}>{t('supportTitle')}</Text>
+      </MotiView>
 
-      <View style={styles.buttonsContainer}>
+      {/* 3. INPUT NOME */}
+      <MotiView {...itemAnimation(200)}>
+        <Text style={styles.label}>{t('nameLabel')}</Text>
+        <TextInput
+          style={styles.input}
+          value={nome}
+          onChangeText={setNome}
+          placeholder={t('namePlaceholder')}
+          placeholderTextColor="#999"
+        />
+      </MotiView>
+
+      {/* 4. INPUT EMAIL */}
+      <MotiView {...itemAnimation(300)}>
+        <Text style={styles.label}>{t('emailLabel')}</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder={t('emailPlaceholder')}
+          placeholderTextColor="#999"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </MotiView>
+
+      {/* 5. INPUT MENSAGEM */}
+      <MotiView {...itemAnimation(400)}>
+        <Text style={styles.label}>{t('messageLabel')}</Text>
+        <TextInput
+          style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
+          value={mensagem}
+          onChangeText={setMensagem}
+          placeholder={t('messagePlaceholder')}
+          placeholderTextColor="#999"
+          multiline
+        />
+      </MotiView>
+
+      {/* 6. BOTÕES SALVAR/LIMPAR */}
+      <MotiView {...itemAnimation(500)} style={styles.buttonsContainer}>
         <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={handleSalvar}>
           <Text style={styles.buttonText}>{t('saveButton')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.clearButton]} onPress={limparCampos}>
           <Text style={styles.buttonText}>{t('clearButton')}</Text>
         </TouchableOpacity>
-      </View>
+      </MotiView>
 
-      <TouchableOpacity style={[styles.button, styles.showButton]} onPress={carregarChamados}>
-        <Text style={styles.buttonText}>{t('showTicketsButton')}</Text>
-      </TouchableOpacity>
+      {/* 7. BOTÃO MOSTRAR CHAMADOS */}
+      <MotiView {...itemAnimation(600)}>
+        <TouchableOpacity style={[styles.button, styles.showButton]} onPress={carregarChamados}>
+          <Text style={styles.buttonText}>{t('showTicketsButton')}</Text>
+        </TouchableOpacity>
+      </MotiView>
 
-      <View style={styles.previewContainer}>
-        <Text style={styles.previewTitle}>{t('inputDataTitle')}</Text>
-        <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('nameLabel')} </Text>{nome || '(vazio)'}</Text>
-        <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('emailLabel')} </Text>{email || '(vazio)'}</Text>
-        <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('messageLabel')} </Text>{mensagem || '(vazio)'}</Text>
-      </View>
+      {/* 8. PREVIEW CONTAINER */}
+      <MotiView {...itemAnimation(700)}>
+        <View style={styles.previewContainer}>
+          <Text style={styles.previewTitle}>{t('inputDataTitle')}</Text>
+          <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('nameLabel')} </Text>{nome || '(vazio)'}</Text>
+          <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('emailLabel')} </Text>{email || '(vazio)'}</Text>
+          <Text style={styles.previewText}><Text style={styles.previewLabel}>{t('messageLabel')} </Text>{mensagem || '(vazio)'}</Text>
+        </View>
+      </MotiView>
 
+      {/* 9. CHAMADOS (Condicional) */}
       {mostrarChamados && (
-        <View style={styles.chamadosContainer}>
+        // Aqui usamos uma animação simples de fade-in para quando a lista aparece
+        <MotiView
+            from={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ type: 'timing', duration: 500 }}
+            style={styles.chamadosContainer}
+        >
           <Text style={styles.chamadosTitle}>{t('savedTicketsTitle')}</Text>
           {chamados.length === 0 ? (
             <Text style={{ textAlign: 'center', color: '#555' }}>{t('noTicketsSaved')}</Text>
@@ -132,12 +171,13 @@ export default function FormularioScreen() {
               )}
             />
           )}
-        </View>
+        </MotiView>
       )}
     </ScrollView>
   );
 }
 
+// O bloco de estilos (StyleSheet.create) permanece o mesmo.
 const styles = StyleSheet.create({
   container: {
     padding: 20,

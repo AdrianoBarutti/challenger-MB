@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useTranslation } from "react-i18next";
+import { MotiView } from 'moti'; 
+
 
 const QrCode = () => {
   const { t } = useTranslation();
@@ -37,7 +39,7 @@ const QrCode = () => {
   if (hasPermission === null) {
     return (
       <View style={styles.centered}>
-        <Text>{t("cameraPermissionRequesting")}</Text>
+        <Text style={styles.centeredText}>{t("cameraPermissionRequesting")}</Text>
       </View>
     );
   }
@@ -45,7 +47,7 @@ const QrCode = () => {
   if (hasPermission === false) {
     return (
       <View style={styles.centered}>
-        <Text>{t("cameraPermissionDenied")}</Text>
+        <Text style={styles.centeredText}>{t("cameraPermissionDenied")}</Text>
       </View>
     );
   }
@@ -53,15 +55,39 @@ const QrCode = () => {
   return (
     <View style={styles.container}>
       {isScanning ? (
-        <View style={styles.scannerArea}>
+        // 2. ÁREA DE SCANNING: Animação de entrada e Loop
+        <MotiView 
+          from={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: 'spring', duration: 1000 }}
+          style={styles.scannerArea}
+        >
           <Text style={styles.scanText}>{t("scanningQrCode")}</Text>
           <ActivityIndicator size="large" color="#28a745" />
-        </View>
+        </MotiView>
       ) : (
-        <View style={styles.resultArea}>
+        // 3. ÁREA DE RESULTADO: Animação de resultado "celebrando" a vaga encontrada
+        <MotiView 
+          from={{ opacity: 0, translateY: 30 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{ type: 'spring', duration: 800, delay: 100 }}
+          style={styles.resultArea}
+        >
           <Text style={styles.resultText}>{t("qrCodeRecognized")}</Text>
-          <Text style={styles.vagaText}>{t("yourParkingSpace")}<Text style={styles.vaga}>{vaga}</Text></Text>
-        </View>
+          
+          {/* Animação extra para a VAGA */}
+          <MotiView
+            from={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', delay: 400, stiffness: 200, damping: 10 }}
+          >
+            <Text style={styles.vagaText}>
+              {t("yourParkingSpace")}
+              <Text style={styles.vaga}>{vaga}</Text>
+            </Text>
+          </MotiView>
+
+        </MotiView>
       )}
     </View>
   );
@@ -108,6 +134,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#121212',
   },
+  // Adiciona a cor de texto para garantir que as mensagens de permissão sejam visíveis
+  centeredText: {
+      color: '#fff', 
+      textAlign: 'center'
+  }
 });
 
 export default QrCode;

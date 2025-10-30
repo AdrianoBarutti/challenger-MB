@@ -4,6 +4,8 @@ import { useNavigation } from "@react-navigation/native";
 import { auth } from "../src/services/firebaseConfig";
 import { signOut } from "firebase/auth";
 import { useTranslation } from "react-i18next";
+import { MotiView } from "moti"; 
+
 
 export default function PerfilUsuario() {
   const { t } = useTranslation();
@@ -30,30 +32,70 @@ export default function PerfilUsuario() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("profileTitle")}</Text>
-      <Image
-        source={{
-          uri:
-            user?.photoURL ||
-            "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-        }}
-        style={styles.profileImage}
-      />
-      <View style={styles.card}>
+      
+      {/* 2. TÍTULO  */}
+      <MotiView
+        from={{ opacity: 0, translateY: -20 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ type: 'timing', duration: 400, delay: 100 }}
+      >
+        <Text style={styles.title}>{t("profileTitle")}</Text>
+      </MotiView>
+
+      {/* 3. IMAGEM DE PERFIL - Animação com efeito 'Spring' */}
+      <MotiView
+        from={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', delay: 300, stiffness: 150, damping: 12 }}
+      >
+        <Image
+          source={{
+            uri:
+              user?.photoURL ||
+              "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+          }}
+          style={styles.profileImage}
+        />
+      </MotiView>
+
+      {/* 4. CARD DE INFORMAÇÕES   */}
+      <MotiView
+        from={{ opacity: 0, translateY: 20 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ type: 'timing', duration: 500, delay: 500 }}
+        style={styles.card}
+      >
         <Text style={styles.label}>{t("nameLabel")}</Text>
         <Text style={styles.value}>{user?.displayName || t("noNameDefined")}</Text>
         <Text style={styles.label}>{t("emailLabel")}</Text>
         <Text style={styles.value}>{user?.email || t("noEmailDefined")}</Text>
-      </View>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>{t("logoutButton")}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
+      </MotiView>
+      
+      {/* 5. BOTÃO LOGOUT - Animação de entrada (delay após o card) */}
+      <MotiView
+        from={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'timing', duration: 400, delay: 700 }}
       >
-        <Text style={styles.backButtonText}>{t("backButton")}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>{t("logoutButton")}</Text>
+        </TouchableOpacity>
+      </MotiView>
+      
+      {/* 6. BOTÃO VOLTAR - Animação final */}
+      <MotiView
+        from={{ opacity: 0, translateY: 10 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ type: 'timing', duration: 400, delay: 800 }}
+      >
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>{t("backButton")}</Text>
+        </TouchableOpacity>
+      </MotiView>
+      
     </View>
   );
 }

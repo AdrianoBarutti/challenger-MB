@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useColorScheme } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
+import { MotiView } from "moti"; 
+
 
 export default function HomeScreen({ navigation, user }: any) {
   const { t, i18n } = useTranslation();
@@ -21,24 +23,37 @@ export default function HomeScreen({ navigation, user }: any) {
 
   return (
     <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
-      <View style={styles.header}>
-        <Image source={require("../assets/mottu-logo.png")} style={styles.logo} resizeMode="contain" />
-        {user ? (
-          <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
-            <Ionicons name="person-circle" size={40} color="#28a745" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => navigation.navigate("LoginUsuario")}
-          >
-            <Text style={styles.loginText}>{t("loginRegisterButton")}</Text>
-          </TouchableOpacity>
-        )}
-      </View>
       
-      {/* Botões de idioma adicionados aqui */}
-      <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 15 }}>
+      {/* 2. HEADER - Envolvido por MotiView */}
+      <MotiView
+        from={{ opacity: 0, translateY: -20 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ type: 'timing', duration: 500, delay: 100 }}
+      >
+        <View style={styles.header}>
+          <Image source={require("../assets/mottu-logo.png")} style={styles.logo} resizeMode="contain" />
+          {user ? (
+            <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
+              <Ionicons name="person-circle" size={40} color="#28a745" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => navigation.navigate("LoginUsuario")}
+            >
+              <Text style={styles.loginText}>{t("loginRegisterButton")}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </MotiView>
+      
+      {/* 3. BOTÕES DE IDIOMA - Envolvido por MotiView */}
+      <MotiView
+        from={{ opacity: 0, translateY: 10 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ type: 'timing', duration: 600, delay: 300 }} // Atraso em relação ao Header
+        style={{ flexDirection: "row", justifyContent: "center", marginVertical: 15 }}
+      >
         <TouchableOpacity
           style={[styles.botao, { marginRight: 10, backgroundColor: "#007bff" }]}
           onPress={() => mudarIdioma("pt")}
@@ -51,9 +66,15 @@ export default function HomeScreen({ navigation, user }: any) {
         >
           <Text style={styles.textoBotao}>ES</Text>
         </TouchableOpacity>
-      </View>
+      </MotiView>
 
-      <View style={styles.content}>
+      {/* 4. CONTEÚDO PRINCIPAL - Envolvido por MotiView */}
+      <MotiView
+        from={{ opacity: 0, translateY: 20 }}
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ type: 'timing', duration: 700, delay: 500 }} // Atraso em relação aos Botões de Idioma
+        style={styles.content} // Usamos o estilo existente
+      >
         <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
           {t("needHelpQuestion")}
         </Text>
@@ -66,29 +87,52 @@ export default function HomeScreen({ navigation, user }: any) {
         >
           <Text style={styles.helpButtonText}>{t("supportButton")}</Text>
         </TouchableOpacity>
-        <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
-          {t("whereToParkQuestion")}
-        </Text>
-        <Text style={[styles.subtitle, { color: isDarkMode ? "#fff" : "#555" }]}>
-          {t("clickForHelpText")}
-        </Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("QrCode")}>
-          <Text style={styles.buttonText}>{t("scanHereButton")}</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity
+        
+        {/* Bloco secundário dentro do conteúdo, para animar separadamente */}
+        <MotiView
+            from={{ opacity: 0, translateY: 15 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ type: 'timing', duration: 700, delay: 700 }}
+            style={{ width: '100%', alignItems: 'center' }}
+        >
+            <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
+              {t("whereToParkQuestion")}
+            </Text>
+            <Text style={[styles.subtitle, { color: isDarkMode ? "#fff" : "#555" }]}>
+              {t("clickForHelpText")}
+            </Text>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("QrCode")}>
+              <Text style={styles.buttonText}>{t("scanHereButton")}</Text>
+            </TouchableOpacity>
+        </MotiView>
+
+      </MotiView>
+      
+      {/* 5. BOTÃO DE TEMA - Envolvido por MotiView com animação spring */}
+      <MotiView
+        from={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ 
+            type: 'spring', 
+            mass: 1,
+            damping: 15,
+            stiffness: 150,
+            delay: 900,
+        }}
         style={[styles.toggleButton, isDarkMode ? styles.darkToggleButton : styles.lightToggleButton]}
-        onPress={toggleTheme}
       >
-        <Ionicons
-          name={isDarkMode ? "moon" : "sunny"}
-          size={25}
-          color={isDarkMode ? "#fff" : "#222"}
-        />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={toggleTheme}>
+            <Ionicons
+              name={isDarkMode ? "moon" : "sunny"}
+              size={25}
+              color={isDarkMode ? "#fff" : "#222"}
+            />
+        </TouchableOpacity>
+      </MotiView>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
