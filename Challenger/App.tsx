@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-// === IMPORTANTE: USAMOS createStackNavigator para customização ===
-import { createStackNavigator, CardStyleInterpolators } from "@react-navigation/stack"; 
+import { createStackNavigator, CardStyleInterpolators } from "@react-navigation/stack";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./src/services/firebaseConfig";
 import { I18nextProvider } from "react-i18next";
@@ -16,8 +15,8 @@ import FormularioScreen from "./App/FormularioScreen";
 import CadastrarUsuario from "./App/CadastrarUsuario";
 import LoginUsuario from "./App/LoginUsuario";
 import PerfilUsuario from "./App/PerfilUsuario";
+import SobreApp from "./App/SobreApp"; 
 
-// === MUDANÇA: Usamos createStackNavigator ===
 const Stack = createStackNavigator();
 
 const styles = StyleSheet.create({
@@ -51,34 +50,29 @@ const AppContent = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator 
+      <Stack.Navigator
         initialRouteName="Home"
-        
         screenOptions={{
-          // Define a animação de deslizamento horizontal (semelhante ao iOS)
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          
-          // Opcional: Define a duração da transição
           transitionSpec: {
-            open: { animation: 'timing', config: { duration: 350 } },
-            close: { animation: 'timing', config: { duration: 350 } },
+            open: { animation: "timing", config: { duration: 350 } },
+            close: { animation: "timing", config: { duration: 350 } },
           },
-          
-          gestureEnabled: true, // Permite voltar deslizando
-          headerShown: false, // Assume que você gerencia o cabeçalho internamente ou o define por tela
+          gestureEnabled: true,
+          headerShown: false,
         }}
       >
-        {/* Telas */}
         <Stack.Screen
           name="Home"
           options={{ title: t("homeScreenTitle"), headerShown: false }}
         >
           {(props) => <HomeScreen {...props} user={user} />}
         </Stack.Screen>
+
         <Stack.Screen
           name="QrCode"
           component={QrCodeScreen}
-          options={{ title: t("qrCodeScreenTitle"), headerShown: true }} 
+          options={{ title: t("qrCodeScreenTitle"), headerShown: true }}
         />
         <Stack.Screen
           name="Formulario"
@@ -99,6 +93,11 @@ const AppContent = () => {
           name="PerfilUsuario"
           component={PerfilUsuario}
           options={{ title: t("profileScreenTitle"), headerShown: true }}
+        />
+        <Stack.Screen
+          name="SobreApp"
+          component={SobreApp}
+          options={{ title: "Sobre o App", headerShown: true }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -39,6 +39,7 @@ Adriano Barutti - RM556760 - https://github.com/AdrianoBarutti
 Vitor Kenzo Mizumoto - RM557245 - https://github.com/vitorkenzoo
 
 
+
 SOLUÇÃO 
 
 A solução permite que o usuário escaneie o QR Code fixado na moto para identificar automaticamente a vaga onde ela está estacionada. Após a leitura, o aplicativo exibe o local exato da vaga, facilitando encontrar a moto rapidamente.

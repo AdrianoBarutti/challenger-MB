@@ -3,8 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useColorScheme } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
-import { MotiView } from "moti"; 
-
+import { MotiView } from "moti";
 
 export default function HomeScreen({ navigation, user }: any) {
   const { t, i18n } = useTranslation();
@@ -16,24 +15,34 @@ export default function HomeScreen({ navigation, user }: any) {
   }, [scheme]);
 
   const toggleTheme = () => setIsDarkMode((prev) => !prev);
-  
+
   const mudarIdioma = (lang: string) => {
     i18n.changeLanguage(lang);
   };
 
   return (
-    <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
-      
-      {/* 2. HEADER - Envolvido por MotiView */}
+    <View
+      style={[
+        styles.container,
+        isDarkMode ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
+      {/* HEADER */}
       <MotiView
         from={{ opacity: 0, translateY: -20 }}
         animate={{ opacity: 1, translateY: 0 }}
-        transition={{ type: 'timing', duration: 500, delay: 100 }}
+        transition={{ type: "timing", duration: 500, delay: 100 }}
       >
         <View style={styles.header}>
-          <Image source={require("../assets/mottu-logo.png")} style={styles.logo} resizeMode="contain" />
+          <Image
+            source={require("../assets/mottu-logo.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
           {user ? (
-            <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("PerfilUsuario")}
+            >
               <Ionicons name="person-circle" size={40} color="#28a745" />
             </TouchableOpacity>
           ) : (
@@ -46,13 +55,17 @@ export default function HomeScreen({ navigation, user }: any) {
           )}
         </View>
       </MotiView>
-      
-      {/* 3. BOTÕES DE IDIOMA - Envolvido por MotiView */}
+
+      {/* BOTÕES DE IDIOMA */}
       <MotiView
         from={{ opacity: 0, translateY: 10 }}
         animate={{ opacity: 1, translateY: 0 }}
-        transition={{ type: 'timing', duration: 600, delay: 300 }} // Atraso em relação ao Header
-        style={{ flexDirection: "row", justifyContent: "center", marginVertical: 15 }}
+        transition={{ type: "timing", duration: 600, delay: 300 }}
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          marginVertical: 15,
+        }}
       >
         <TouchableOpacity
           style={[styles.botao, { marginRight: 10, backgroundColor: "#007bff" }]}
@@ -68,12 +81,12 @@ export default function HomeScreen({ navigation, user }: any) {
         </TouchableOpacity>
       </MotiView>
 
-      {/* 4. CONTEÚDO PRINCIPAL - Envolvido por MotiView */}
+      {/* CONTEÚDO PRINCIPAL */}
       <MotiView
         from={{ opacity: 0, translateY: 20 }}
         animate={{ opacity: 1, translateY: 0 }}
-        transition={{ type: 'timing', duration: 700, delay: 500 }} // Atraso em relação aos Botões de Idioma
-        style={styles.content} // Usamos o estilo existente
+        transition={{ type: "timing", duration: 700, delay: 500 }}
+        style={styles.content}
       >
         <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
           {t("needHelpQuestion")}
@@ -87,52 +100,72 @@ export default function HomeScreen({ navigation, user }: any) {
         >
           <Text style={styles.helpButtonText}>{t("supportButton")}</Text>
         </TouchableOpacity>
-        
-        {/* Bloco secundário dentro do conteúdo, para animar separadamente */}
-        <MotiView
-            from={{ opacity: 0, translateY: 15 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{ type: 'timing', duration: 700, delay: 700 }}
-            style={{ width: '100%', alignItems: 'center' }}
-        >
-            <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
-              {t("whereToParkQuestion")}
-            </Text>
-            <Text style={[styles.subtitle, { color: isDarkMode ? "#fff" : "#555" }]}>
-              {t("clickForHelpText")}
-            </Text>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("QrCode")}>
-              <Text style={styles.buttonText}>{t("scanHereButton")}</Text>
-            </TouchableOpacity>
-        </MotiView>
 
+        {/* BLOCO SECUNDÁRIO */}
+        <MotiView
+          from={{ opacity: 0, translateY: 15 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{ type: "timing", duration: 700, delay: 700 }}
+          style={{ width: "100%", alignItems: "center" }}
+        >
+          <Text style={[styles.title, { color: isDarkMode ? "#fff" : "#222" }]}>
+            {t("whereToParkQuestion")}
+          </Text>
+          <Text style={[styles.subtitle, { color: isDarkMode ? "#fff" : "#555" }]}>
+            {t("clickForHelpText")}
+          </Text>
+
+          {/* Botão Escaneie Aqui */}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("QrCode")}
+          >
+            <Text style={styles.buttonText}>{t("scanHereButton")}</Text>
+          </TouchableOpacity>
+
+          {/* ✅ Novo botão “Sobre o App” */}
+          <TouchableOpacity
+            style={[styles.button, styles.aboutButton]}
+            onPress={() => navigation.navigate("SobreApp")}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              size={20}
+              color="#fff"
+              style={{ marginRight: 6 }}
+            />
+            <Text style={styles.buttonText}>Sobre o App</Text>
+          </TouchableOpacity>
+        </MotiView>
       </MotiView>
-      
-      {/* 5. BOTÃO DE TEMA - Envolvido por MotiView com animação spring */}
+
+      {/* BOTÃO DE TEMA */}
       <MotiView
         from={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ 
-            type: 'spring', 
-            mass: 1,
-            damping: 15,
-            stiffness: 150,
-            delay: 900,
+        transition={{
+          type: "spring",
+          mass: 1,
+          damping: 15,
+          stiffness: 150,
+          delay: 900,
         }}
-        style={[styles.toggleButton, isDarkMode ? styles.darkToggleButton : styles.lightToggleButton]}
+        style={[
+          styles.toggleButton,
+          isDarkMode ? styles.darkToggleButton : styles.lightToggleButton,
+        ]}
       >
         <TouchableOpacity onPress={toggleTheme}>
-            <Ionicons
-              name={isDarkMode ? "moon" : "sunny"}
-              size={25}
-              color={isDarkMode ? "#fff" : "#222"}
-            />
+          <Ionicons
+            name={isDarkMode ? "moon" : "sunny"}
+            size={25}
+            color={isDarkMode ? "#fff" : "#222"}
+          />
         </TouchableOpacity>
       </MotiView>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -166,15 +199,27 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
   },
-  helpButtonText: { color: "#fff", fontSize: 18, fontWeight: "600", textAlign: "center" },
+  helpButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+  },
   button: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#28a745",
     paddingVertical: 14,
     paddingHorizontal: 25,
     borderRadius: 30,
     width: "100%",
+    marginTop: 10,
   },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "600", textAlign: "center" },
+  aboutButton: {
+    backgroundColor: "#007bff",
+  },
   toggleButton: {
     position: "absolute",
     bottom: 20,
@@ -188,16 +233,11 @@ const styles = StyleSheet.create({
   },
   lightToggleButton: { backgroundColor: "#28a745" },
   darkToggleButton: { backgroundColor: "#2c2c2c" },
-  // Adicione os estilos dos botões de idioma
   botao: {
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     alignItems: "center",
   },
-  textoBotao: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 16,
-  },
+  textoBotao: { color: "#fff", fontWeight: "700", fontSize: 16 },
 });
