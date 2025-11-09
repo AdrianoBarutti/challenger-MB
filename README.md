@@ -1,46 +1,87 @@
-Challenger-MB
+# Nome do app: VagasMottu em instantes 
 
 
-Pré-requisitos
-Antes de iniciar, certifique-se de ter o Node.js instalado na sua máquina. 
+Aplicativo desenvolvido em **React Native com Expo**, com o objetivo de otimizar a organização do pátio de motos da **Mottu**.
 
+---
 
-Como iniciar o projeto
-1. Acesse a pasta do projeto
-Abra o terminal ou prompt de comando e navegue até a pasta do projeto Challenger. Você pode fazer isso com o comando cd:
+## ⚙️ Pré-requisitos
+Antes de iniciar, certifique-se de ter o **Node.js** instalado na sua máquina.
 
+---
+
+## 🚀 Como iniciar o projeto
+
+### 1. Acesse a pasta do projeto
+```bash
 cd Challenger
+```
 
-2. Instalar dependências
-O próximo passo é instalar todas as dependências do projeto, que são listadas no arquivo package.json. Para isso, basta rodar o seguinte comando no terminal:
+### 2. Instalar dependências
+```bash
+npm install
+```
 
-npm install DENTRO DA PASTA Challenger
-
-Isso irá baixar todos os pacotes necessários para rodar o projeto.
-
-3. Iniciar o projeto
-Agora, para iniciar o projeto, execute:
-
+### 3. Iniciar o projeto
+```bash
 npm start
+```
 
-Isso irá iniciar o servidor de desenvolvimento e você verá uma mensagem no terminal informando que o app está rodando.
+Ao iniciar, escolha o modo de exibição:
+- **A** → Abrir no app mobile (Expo Go)
+- **W** → Abrir no navegador (modo Web)
 
-Escolher o tipo de exibição do app
-Ao iniciar o projeto, será solicitado para você escolher como deseja abrir o app:
+---
 
-App (Mobile): Pressione A para abrir no aplicativo.
+## 💡 Proposta e Funcionalidades
 
-Web: Pressione W para abrir no navegador.
+O **Challenger-MB** tem como propósito facilitar a gestão e o estacionamento das motos no pátio da **Mottu**, utilizando tecnologias modernas e acessíveis.
 
-AUTORES
+### Funcionalidades principais:
+- 📷 **Escaneamento de QR Code** — identifica a vaga da moto automaticamente.  
+- 🏍️ **Exibição da vaga correspondente** — mostra na tela o local exato onde estacionar.  
+- 💬 **Tela de suporte** — formulário para enviar chamados e visualizar os já salvos.  
+- 👤 **Perfil do usuário** — informações da conta e opção de logout.  
+- 🌐 **Suporte a múltiplos idiomas** — alternância entre **português e espanhol**.  
+- 📄 **Tela "Sobre o App"** — informações da versão, commit e descrição do projeto.
 
-Adriano Barutti - RM556760 - https://github.com/AdrianoBarutti
+---
 
-Vitor Kenzo Mizumoto - RM557245 - https://github.com/vitorkenzoo
+## 🗂️ Estrutura de Pastas 
+
+```
+Challenger/
+│
+├── App/                    # Páginas principais do app
+│   ├── Login.tsx
+│   ├── Cadastro.tsx
+│   ├── Suporte.tsx
+│   ├── Perfil.tsx
+│   └── SobreApp.tsx
+│
+├── services/               # Configurações e integrações
+│   ├── i18n.ts             # Internacionalização (PT/ES)
+│   └── firebaseConfig.ts   # Conexão com Firebase
+│
+├── assets/                 # Imagens e ícones
+│
+├── commit.json             # Informações do commit atual
+├── package.json
+└── App.tsx                 # Arquivo principal
+```
+
+---
+
+## 👨‍💻 Autores
 
 
 
-SOLUÇÃO 
+| **Adriano Barutti** | RM556760 | [github.com/AdrianoBarutti](https://github.com/AdrianoBarutti) |
+| **Vitor Kenzo Mizumoto** | RM557245 | [github.com/vitorkenzoo](https://github.com/vitorkenzoo) |
 
-A solução permite que o usuário escaneie o QR Code fixado na moto para identificar automaticamente a vaga onde ela está estacionada. Após a leitura, o aplicativo exibe o local exato da vaga, facilitando encontrar a moto rapidamente.
-Isso torna o processo mais prático, rápido e organizado, melhorando a experiência do usuário e reduzindo o tempo perdido procurando a moto.
+---
+
+## 💬 Solução
+
+A solução permite que o usuário **escaneie o QR Code fixado na moto** para identificar automaticamente a **vaga onde ela está estacionada**.  
+Após a leitura, o aplicativo exibe o local exato da vaga, tornando o processo **mais prático, rápido e organizado**, melhorando a experiência do usuário e **reduzindo o tempo perdido procurando motos**.
